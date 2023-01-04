@@ -138,6 +138,7 @@ pub(crate) enum ResourceValueType {
     Float = 0x04,
     Dimension = 0x05,
     Fraction = 0x06,
+    Unknown = 0x07,
     Dec = 0x10,
     Hex = 0x11,
     Boolean = 0x12,
