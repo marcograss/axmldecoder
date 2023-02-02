@@ -119,7 +119,7 @@ impl XmlDocument {
         // attributes to it.
         if name == "manifest" {
             for (url, name) in namespaces.iter() {
-                attributes.insert(format!("xmlns:{}", name), url.to_string());
+                attributes.insert(format!("xmlns:{name}"), url.to_string());
             }
         }
 
