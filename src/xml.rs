@@ -50,7 +50,7 @@ impl XmlDocument {
                     let e = element_tracker.pop().unwrap();
 
                     if element_tracker.is_empty() {
-                        return Ok(XmlDocument {
+                        return Ok(Self {
                             root: Some(Node::Element(e)),
                         });
                     }
@@ -75,7 +75,7 @@ impl XmlDocument {
 
     ///Returns the root [Element] of the XML document.
     #[must_use]
-    pub fn get_root(&self) -> &Option<Node> {
+    pub const fn get_root(&self) -> &Option<Node> {
         &self.root
     }
 
@@ -182,7 +182,7 @@ pub struct Element {
 impl Element {
     ///Returns a map of attributes associated with the element.
     #[must_use]
-    pub fn get_attributes(&self) -> &IndexMap<String, String> {
+    pub const fn get_attributes(&self) -> &IndexMap<String, String> {
         &self.attributes
     }
 
@@ -194,7 +194,7 @@ impl Element {
 
     ///Returns a list of child nodes.
     #[must_use]
-    pub fn get_children(&self) -> &Vec<Node> {
+    pub const fn get_children(&self) -> &Vec<Node> {
         &self.children
     }
 

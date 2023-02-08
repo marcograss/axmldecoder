@@ -112,7 +112,7 @@ fn parse_utf16_string(string_data: &[u8], offset: usize) -> Result<String, Parse
     Ok(s)
 }
 
-fn is_high_bit_set_16(input: u16) -> bool {
+const fn is_high_bit_set_16(input: u16) -> bool {
     input & (1 << 15) != 0
 }
 
@@ -140,6 +140,6 @@ fn parse_utf8_string(string_data: &[u8], offset: usize) -> Result<String, ParseE
     Ok(s)
 }
 
-fn is_high_bit_set_8(input: u8) -> bool {
+const fn is_high_bit_set_8(input: u8) -> bool {
     input & (1 << 7) != 0
 }
