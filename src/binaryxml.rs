@@ -3,7 +3,7 @@ use deku::prelude::*;
 use std::rc::Rc;
 
 #[derive(Debug, DekuRead)]
-pub(crate) struct BinaryXmlDocument {
+pub struct BinaryXmlDocument {
     #[allow(dead_code)] // `header` is used by `deku`
     pub(crate) header: ChunkHeader,
     pub(crate) string_pool: StringPool,
@@ -15,9 +15,9 @@ pub(crate) struct BinaryXmlDocument {
     pub(crate) elements: Vec<XmlNode>,
 }
 
-#[derive(Debug, PartialEq, Clone, Copy, DekuRead, DekuWrite)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, DekuRead, DekuWrite)]
 #[deku(type = "u16")]
-pub(crate) enum ResourceType {
+pub enum ResourceType {
     NullType = 0x000,
     StringPool = 0x0001,
     Table = 0x0002,
@@ -36,21 +36,21 @@ pub(crate) enum ResourceType {
 }
 
 #[derive(Clone, Debug, DekuRead, DekuWrite)]
-pub(crate) struct ChunkHeader {
+pub struct ChunkHeader {
     pub(crate) typ: ResourceType,
     pub(crate) header_size: u16,
     pub(crate) size: u32,
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct ResourceMap {
+pub struct ResourceMap {
     pub(crate) header: ChunkHeader,
     #[deku(count = "(header.size - u32::from(header.header_size)) / 4")]
     pub(crate) resource_ids: Vec<u32>,
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct XmlNode {
+pub struct XmlNode {
     pub(crate) header: XmlNodeHeader,
     #[deku(ctx = "header.chunk_header.typ")]
     pub(crate) element: XmlNodeType,
@@ -59,7 +59,7 @@ pub(crate) struct XmlNode {
 #[allow(clippy::enum_variant_names)]
 #[derive(Debug, DekuRead, DekuWrite)]
 #[deku(ctx = "typ: ResourceType", id = "typ")]
-pub(crate) enum XmlNodeType {
+pub enum XmlNodeType {
     #[deku(id = "ResourceType::XmlStartNameSpace")]
     XmlStartNameSpace(XmlStartNameSpace),
     #[deku(id = "ResourceType::XmlEndNameSpace")]
@@ -73,26 +73,26 @@ pub(crate) enum XmlNodeType {
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct XmlNodeHeader {
+pub struct XmlNodeHeader {
     pub(crate) chunk_header: ChunkHeader,
     pub(crate) line_no: u32,
     pub(crate) comment: u32,
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct XmlStartNameSpace {
+pub struct XmlStartNameSpace {
     pub(crate) prefix: u32,
     pub(crate) uri: u32,
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct XmlEndNameSpace {
+pub struct XmlEndNameSpace {
     pub(crate) prefix: u32,
     pub(crate) uri: u32,
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct XmlAttrExt {
+pub struct XmlAttrExt {
     pub(crate) ns: u32,
     pub(crate) name: u32,
     pub(crate) attribute_start: u16,
@@ -104,7 +104,7 @@ pub(crate) struct XmlAttrExt {
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct ResourceValue {
+pub struct ResourceValue {
     pub(crate) size: u16,
     pub(crate) res: u8,
     pub(crate) data_type: ResourceValueType,
@@ -128,9 +128,9 @@ impl ResourceValue {
     }
 }
 
-#[derive(Debug, PartialEq, DekuRead, DekuWrite)]
+#[derive(Debug, PartialEq, Eq, DekuRead, DekuWrite)]
 #[deku(type = "u8")]
-pub(crate) enum ResourceValueType {
+pub enum ResourceValueType {
     Null = 0x00,
     Reference = 0x01,
     Attribute = 0x02,
@@ -149,7 +149,7 @@ pub(crate) enum ResourceValueType {
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct XmlAttribute {
+pub struct XmlAttribute {
     pub(crate) ns: u32,
     pub(crate) name: u32,
     pub(crate) raw_value: u32,
@@ -157,20 +157,20 @@ pub(crate) struct XmlAttribute {
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct XmlStartElement {
+pub struct XmlStartElement {
     pub(crate) attr_ext: XmlAttrExt,
     #[deku(count = "attr_ext.attribute_count")]
     pub(crate) attributes: Vec<XmlAttribute>,
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct XmlEndElement {
+pub struct XmlEndElement {
     pub(crate) ns: u32,
     pub(crate) name: u32,
 }
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct XmlCdata {
+pub struct XmlCdata {
     pub(crate) data: u32,
     pub(crate) typed_data: ResourceValue,
 }

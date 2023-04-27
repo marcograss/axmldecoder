@@ -10,7 +10,7 @@ use crate::binaryxml::ChunkHeader;
 use crate::ParseError;
 
 #[derive(Debug, DekuRead, DekuWrite)]
-pub(crate) struct StringPoolHeader {
+pub struct StringPoolHeader {
     pub(crate) chunk_header: ChunkHeader,
     pub(crate) string_count: u32,
     pub(crate) style_count: u32,
@@ -20,7 +20,7 @@ pub(crate) struct StringPoolHeader {
 }
 
 #[derive(Debug, DekuRead)]
-pub(crate) struct StringPool {
+pub struct StringPool {
     pub(crate) header: StringPoolHeader,
     #[deku(reader = "StringPool::read_strings(header, deku::rest)")]
     pub(crate) strings: Vec<Rc<String>>,
