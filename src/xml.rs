@@ -118,7 +118,7 @@ impl XmlDocument {
         // Specially handle the <manifest> element by adding the namespace
         // attributes to it.
         if name == "manifest" {
-            for (url, name) in namespaces.iter() {
+            for (url, name) in namespaces {
                 attributes.insert(format!("xmlns:{name}"), url.to_string());
             }
         }
