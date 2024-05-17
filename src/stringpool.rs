@@ -103,7 +103,7 @@ fn parse_utf16_string(string_data: &[u8], offset: usize) -> Result<String, Parse
 
     let mut s = Vec::with_capacity(len.into());
     for i in 0..len {
-        let index = string_start + usize::try_from(i * 2).unwrap();
+        let index = string_start + usize::from(i * 2);
         let char = LittleEndian::read_u16(&string_data[index..index + 2]);
         s.push(char);
     }
@@ -131,7 +131,7 @@ fn parse_utf8_string(string_data: &[u8], offset: usize) -> Result<String, ParseE
 
     let mut s = Vec::with_capacity(len.into());
     for i in 0..len {
-        let index = string_start + usize::try_from(i).unwrap();
+        let index = string_start + usize::from(i);
         let char = string_data[index];
         s.push(char);
     }
